@@ -1,5 +1,6 @@
 package com.carin.doninelli.midna.bot.commands;
 
+import org.jetbrains.annotations.Nullable;
 import sx.blah.discord.handle.obj.IMessage;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface Command {
 
     List<String> getUsageWords();
 
-    void execute(IMessage message, String commandContent);
+    void execute(IMessage message, @Nullable String commandContent);
 }

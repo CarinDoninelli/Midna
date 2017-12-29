@@ -1,5 +1,6 @@
 package com.carin.doninelli.midna.bot.commands;
 
+import org.jetbrains.annotations.Nullable;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
@@ -38,11 +39,11 @@ public final class HelpCommand implements Command {
     }
 
     @Override
-    public void execute(IMessage message, String commandContent) {
-        message.reply("", getHelpMessage());
+    public void execute(IMessage message, @Nullable String commandContent) {
+        message.reply("", buildHelpMessage());
     }
 
-    private EmbedObject getHelpMessage() {
+    private EmbedObject buildHelpMessage() {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         for (Command command : commands) {
             String commandTitle = command.getName() + " | " + command.getPrefix() + command.getUsageWords();

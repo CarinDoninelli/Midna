@@ -14,6 +14,5 @@ internal inline fun <T> URL.useHttpUrlConnection(f: (HttpURLConnection) -> T): T
 }
 
 internal inline fun <T> HttpURLConnection.ifSuccess(f: (HttpURLConnection) -> T): T? {
-    return if (responseCode == 200) f(this)
-    else null
+    return if (responseCode == 200) f(this) else null
 }
