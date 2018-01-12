@@ -7,6 +7,7 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public final class EchoCommand implements Command {
     @Override
@@ -34,9 +35,11 @@ public final class EchoCommand implements Command {
         if (commandContent == null) {
             message.reply("`Please Provide a Message.`");
         } else {
+            String authorName = Optional.ofNullable(message.getAuthor().getNicknameForGuild(message.getGuild()))
+                    .orElse(message.getAuthor().getName());
             EmbedObject embed = new EmbedBuilder()
                     .withFooterIcon(message.getAuthor().getAvatarURL())
-                    .withFooterText(message.getAuthor().getNicknameForGuild(message.getGuild()))
+                    .withFooterText(authorName)
                     .withDescription(commandContent)
                     .build();
             message.reply("", embed);

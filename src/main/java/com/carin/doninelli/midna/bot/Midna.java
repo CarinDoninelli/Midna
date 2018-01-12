@@ -1,8 +1,9 @@
 package com.carin.doninelli.midna.bot;
 
+import com.carin.doninelli.dex.DexFactory;
 import com.carin.doninelli.midna.bot.commands.AvatarCommand;
 import com.carin.doninelli.midna.bot.commands.Command;
-import com.carin.doninelli.midna.bot.commands.EchoCommand;
+import com.carin.doninelli.midna.bot.commands.DexCommand;
 import com.carin.doninelli.midna.bot.commands.HelpCommand;
 import com.carin.doninelli.midna.bot.commands.registrator.CommandRegistrationHandler;
 import sx.blah.discord.api.ClientBuilder;
@@ -15,6 +16,9 @@ import java.util.List;
 import java.util.Properties;
 
 public final class Midna {
+
+    private static final String CREDENTIALS_PROPERTIES = "credentials.properties";
+
     public static void main(String[] args) {
         String token = readToken();
 
@@ -23,7 +27,7 @@ public final class Midna {
 
         List<Command> commands = Arrays.asList(
                 new AvatarCommand(),
-                new EchoCommand()
+                new DexCommand(new DexFactory().newDex())
         );
 
         commands.forEach(commandRegistrationHandler::register);
@@ -31,7 +35,8 @@ public final class Midna {
     }
 
     private static String readToken() {
-        try (InputStream input = Midna.class.getClassLoader().getResourceAsStream("credentials.properties")) {
+        ClassLoader loader = Midna.class.getClassLoader();
+        try (InputStream input = loader.getResourceAsStream(CREDENTIALS_PROPERTIES)) {
             Properties properties = new Properties();
             properties.load(input);
 

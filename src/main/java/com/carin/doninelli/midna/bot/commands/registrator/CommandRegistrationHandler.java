@@ -9,9 +9,10 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public final class CommandRegistrationHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(CommandRegistrationHandler.class);
 
     private final IDiscordClient discordClient;
 
@@ -20,25 +21,8 @@ public final class CommandRegistrationHandler {
     }
 
     public void register(Command command) {
-        discordClient.getDispatcher().registerListener((IListener<MessageReceivedEvent>) event -> {
-            if (event.getMessage().getChannel().isPrivate()) {
-                return;
-            }
-
-            String content = event.getMessage().getContent();
-            List<String> tokens = Arrays.asList(content.split("\\s+", 2));
-
-            if (tokens.isEmpty()) {
-                return;
-            }
-
-            String commandToken = tokens.get(0);
-            if (command.getUsageWords().stream().anyMatch(it -> command.getPrefix().concat(it).equals(commandToken))) {
-                String trimmedContent = tokens.size() == 2 ? tokens.get(1) : null;
-
-                LOG.info("{} command executed.", command.getName());
-                command.execute(event.getMessage(), trimmedContent);
-            }
-        });
+        CommandReceivedListener listener = new CommandReceivedListener(command);
+        discordClient.getDispatcher()
+                .registerListener(listener);
     }
 }
