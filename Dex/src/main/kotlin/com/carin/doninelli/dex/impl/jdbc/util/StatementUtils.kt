@@ -1,4 +1,4 @@
-package com.carin.doninelli.dex.util
+package com.carin.doninelli.dex.impl.jdbc.util
 
 import java.sql.PreparedStatement
 import java.sql.ResultSet

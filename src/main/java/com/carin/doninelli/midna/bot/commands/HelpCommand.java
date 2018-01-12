@@ -1,9 +1,11 @@
 package com.carin.doninelli.midna.bot.commands;
 
+import com.carin.doninelli.midna.bot.ResponseService;
 import org.jetbrains.annotations.Nullable;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.MessageBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,10 +14,12 @@ import java.util.List;
 public final class HelpCommand implements Command {
 
     private final List<Command> commands;
+    private final ResponseService responseService;
 
     public HelpCommand(List<Command> commands) {
         this.commands = new ArrayList<>(commands);
-        this.commands.add(0, this);
+        this.commands.add(0, this); // Done so help is also displayed.
+        responseService = new ResponseService(true);
     }
 
     @Override
@@ -40,7 +44,10 @@ public final class HelpCommand implements Command {
 
     @Override
     public void execute(IMessage message, @Nullable String commandContent) {
-        message.reply("", buildHelpMessage());
+        MessageBuilder response = new MessageBuilder(message.getClient())
+                .withChannel(message.getChannel())
+                .withEmbed(buildHelpMessage());
+        responseService.bufferResponseRequest(response);
     }
 
     private EmbedObject buildHelpMessage() {

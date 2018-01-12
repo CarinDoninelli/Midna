@@ -1,16 +1,24 @@
 package com.carin.doninelli.midna.bot.commands;
 
+import com.carin.doninelli.midna.bot.ResponseService;
 import org.jetbrains.annotations.Nullable;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.MessageBuilder;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public final class AvatarCommand implements Command {
+
+    private final ResponseService responseService;
+
+    public AvatarCommand() {
+        responseService = new ResponseService(true);
+    }
 
     @Override
     public String getDescription() {
@@ -35,8 +43,10 @@ public final class AvatarCommand implements Command {
     @Override
     public void execute(IMessage message, @Nullable String commandContent) {
         Optional<IUser> user = message.getMentions().stream()
-                                      .findFirst();
+                .findFirst();
 
+        MessageBuilder response = new MessageBuilder(message.getClient())
+                .withChannel(message.getChannel());
         if (user.isPresent()) {
             String avatar = user.get().getAvatarURL().concat("?size=1024");
             EmbedObject embed = new EmbedBuilder()
@@ -44,9 +54,11 @@ public final class AvatarCommand implements Command {
                     .withFooterIcon(avatar)
                     .withFooterText(user.get().getDisplayName(message.getGuild()))
                     .build();
-            message.reply("", embed);
+            response.withEmbed(embed);
         } else {
-            message.reply("`User not found`");
+            response.withContent("`User not found`");
         }
+
+        responseService.bufferResponseRequest(response);
     }
 }

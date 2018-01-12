@@ -25,9 +25,10 @@ public final class Midna {
         IDiscordClient discordClient = new ClientBuilder().withToken(token).login();
         CommandRegistrationHandler commandRegistrationHandler = new CommandRegistrationHandler(discordClient);
 
+        DexFactory dexFactory = new DexFactory();
         List<Command> commands = Arrays.asList(
                 new AvatarCommand(),
-                new DexCommand(new DexFactory().newDex())
+                new DexCommand(dexFactory.createDex())
         );
 
         commands.forEach(commandRegistrationHandler::register);

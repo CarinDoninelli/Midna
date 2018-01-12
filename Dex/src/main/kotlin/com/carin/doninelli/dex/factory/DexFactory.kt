@@ -3,8 +3,8 @@
 package com.carin.doninelli.dex.factory
 
 import com.carin.doninelli.dex.Dex
-import com.carin.doninelli.dex.impl.sql.SqlDex
+import com.carin.doninelli.dex.impl.jdbc.JdbcDex
 
 class DexFactory {
-    fun newDex(): Dex = SqlDex()
+    fun createDex(): Dex = JdbcDex()
 }
