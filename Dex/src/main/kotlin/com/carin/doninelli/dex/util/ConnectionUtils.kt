@@ -1,18 +1,8 @@
 package com.carin.doninelli.dex.util
 
-import java.net.HttpURLConnection
-import java.net.URL
+import java.sql.Connection
+import java.sql.PreparedStatement
 
-internal inline fun <T> URL.useHttpUrlConnection(f: (HttpURLConnection) -> T): T {
-    val connection: HttpURLConnection = openConnection() as HttpURLConnection
-
-    return try {
-        connection.let(f)
-    } finally {
-        connection.disconnect()
-    }
-}
-
-internal inline fun <T> HttpURLConnection.ifSuccess(f: (HttpURLConnection) -> T): T? {
-    return if (responseCode == 200) f(this) else null
+internal inline fun <R> Connection.withStatement(sql: String, action: PreparedStatement.() -> R): R {
+    return prepareStatement(sql).use(action)
 }

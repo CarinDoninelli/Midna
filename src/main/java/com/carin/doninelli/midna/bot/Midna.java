@@ -1,6 +1,6 @@
 package com.carin.doninelli.midna.bot;
 
-import com.carin.doninelli.dex.DexFactory;
+import com.carin.doninelli.dex.factory.DexFactory;
 import com.carin.doninelli.midna.bot.commands.AvatarCommand;
 import com.carin.doninelli.midna.bot.commands.Command;
 import com.carin.doninelli.midna.bot.commands.DexCommand;
