@@ -3,13 +3,13 @@ package com.carin.doninelli.midna.bot.commands;
 import com.carin.doninelli.dex.Dex;
 import com.carin.doninelli.dex.entities.Pokemon;
 import com.carin.doninelli.midna.bot.ResponseService;
+import com.carin.doninelli.midna.bot.embed.mappers.PokedexEntryEmbedMapper;
 import com.carin.doninelli.midna.bot.util.NumberUtil;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.util.EmbedBuilder;
 import sx.blah.discord.util.MessageBuilder;
 
 import java.util.Collections;
@@ -20,10 +20,12 @@ public final class DexCommand implements Command {
 
     private final Dex dex;
     private final ResponseService responseService;
+    private final PokedexEntryEmbedMapper pokedexEntryEmbedMapper;
 
     public DexCommand(Dex dex) {
         this.dex = dex;
         responseService = new ResponseService(true);
+        pokedexEntryEmbedMapper = new PokedexEntryEmbedMapper();
     }
 
     @Override
@@ -69,10 +71,7 @@ public final class DexCommand implements Command {
             response.appendContent("`No info found on ".concat(commandContent).concat("`"));
         } else {
             LOGGER.info("Pokemon with query {} found. {}", commandContent, pokemon);
-            EmbedObject embed = new EmbedBuilder()
-                    .withTitle(getName())
-                    .withDescription(pokemon.toString())
-                    .build();
+            EmbedObject embed = pokedexEntryEmbedMapper.map(pokemon);
             response.withEmbed(embed);
         }
 
