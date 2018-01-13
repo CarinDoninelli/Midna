@@ -1,6 +1,7 @@
 package com.carin.doninelli.dex.impl.jdbc
 
 import com.carin.doninelli.dex.entities.Ability
+import com.carin.doninelli.dex.entities.Color
 import com.carin.doninelli.dex.entities.Pokemon
 import com.carin.doninelli.dex.entities.Type
 import com.carin.doninelli.dex.impl.jdbc.util.fetchQuerySequence
@@ -67,6 +68,10 @@ internal class DexDao(private val connection: Connection) {
             height = resultSet.getDouble("height"),
             weight = resultSet.getDouble("weight"),
             abilities = getAbilitiesByPokemonId(resultSet.getInt("id")),
-            types = getTypesByPokemonId(resultSet.getInt("id"))
+            types = getTypesByPokemonId(resultSet.getInt("id")),
+            color = Color(
+                    id = resultSet.getInt("color_id"),
+                    name = resultSet.getString("color_name")
+            )
     )
 }

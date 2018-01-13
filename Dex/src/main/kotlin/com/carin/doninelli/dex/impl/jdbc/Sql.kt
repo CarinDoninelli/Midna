@@ -10,11 +10,17 @@ internal enum class Sql(val query: String) {
             "  pokemon.id, " +
             "  pokemon.height, " +
             "  pokemon.weight, " +
-            "  pokemon.base_experience " +
+            "  pokemon.base_experience, " +
+            "  color.id         AS color_id, " +
+            "  color.identifier AS color_name " +
             "FROM pokemon " +
+            "  JOIN pokemon_species " +
+            "    ON pokemon.species_id = pokemon_species.id " +
+            "  JOIN pokemon_colors color " +
+            "    ON pokemon_species.color_id = color.id " +
             "  JOIN pokemon_species_names AS sname " +
             "    ON sname.pokemon_species_id = pokemon.species_id " +
-            "WHERE sname.local_language_id = $ENGLISH_LANG_ID " +
+            "WHERE sname.local_language_id = 9  " +
             "      AND pokemon.id = ?"
     ),
 

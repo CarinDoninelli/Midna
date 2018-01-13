@@ -8,6 +8,7 @@ data class Pokemon internal constructor(
         val height: Double,
         val weight: Double,
         val abilities: List<Ability>,
-        val types: List<Type>
+        val types: List<Type>,
+        val color: Color
 ) : Serializable
 

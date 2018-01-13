@@ -1,4 +1,4 @@
-package com.carin.doninelli.midna.bot;
+package com.carin.doninelli.midna.bot.threading;
 
 import org.jetbrains.annotations.NotNull;
 
