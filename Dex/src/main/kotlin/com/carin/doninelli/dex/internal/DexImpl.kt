@@ -3,6 +3,7 @@ package com.carin.doninelli.dex.internal
 import com.carin.doninelli.core.loader.ResourceLoader
 import com.carin.doninelli.dex.Dex
 import com.carin.doninelli.dex.entities.ability.Ability
+import com.carin.doninelli.dex.entities.move.Move
 import com.carin.doninelli.dex.entities.pokemon.Pokemon
 import com.carin.doninelli.dex.internal.messages.LogMessage
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory
 private const val POKEDEX_PATH = "pokedex"
 private const val POKEMON_PATH = "$POKEDEX_PATH/pokemon"
 private const val ABILITY_PATH = "$POKEDEX_PATH/ability"
+private const val MOVE_PATH = "$POKEDEX_PATH/move"
 
 internal class DexImpl(private val mapper: ObjectMapper) : Dex {
     private val log = LoggerFactory.getLogger(DexImpl::class.java)
@@ -39,5 +41,16 @@ internal class DexImpl(private val mapper: ObjectMapper) : Dex {
         val abilityJsonPath ="$ABILITY_PATH/$sanitizedName"
 
         return loader.getResourceAsStreamOrNull(abilityJsonPath)?.use(mapper::readValue)
+    }
+
+    override fun searchMove(name: String): Move? {
+        log.debug(LogMessage.MOVE_SEARCH_CALLED.value, name)
+        val sanitizedName = name.toLowerCase()
+                .replace("[\\s\\-]+".toRegex(), "_")
+        log.debug(LogMessage.MOVE_NAME_SANITIZED.value, sanitizedName)
+
+        val moveJsonPath = "$MOVE_PATH/$sanitizedName.json"
+
+        return loader.getResourceAsStreamOrNull(moveJsonPath)?.use(mapper::readValue)
     }
 }

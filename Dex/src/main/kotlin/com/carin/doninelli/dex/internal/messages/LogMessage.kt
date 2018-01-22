@@ -7,5 +7,9 @@ internal enum class LogMessage(val value: String) {
 
     ABILITY_SEARCH_CALLED("Ability search called with name '{}'"),
 
-    ABILITY_NAME_SANITIZED("Ability name sanitized to '{}'")
+    ABILITY_NAME_SANITIZED("Ability name sanitized to '{}'"),
+
+    MOVE_SEARCH_CALLED("Move search called with name '{}'"),
+
+    MOVE_NAME_SANITIZED("Move name sanitized to '{}'")
 }
