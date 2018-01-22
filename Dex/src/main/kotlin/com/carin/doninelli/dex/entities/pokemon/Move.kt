@@ -1,6 +1,6 @@
 package com.carin.doninelli.dex.entities.pokemon
 
-import com.carin.doninelli.dex.deserializers.PokemonMoveDeserializer
+import com.carin.doninelli.dex.internal.deserializers.PokemonMoveDeserializer
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.io.Serializable
@@ -29,6 +29,14 @@ data class TmMove internal constructor(
 
 data class ParentMove internal constructor(
         val parent: String,
+
+        @JsonProperty("move")
+        override val name: String
+) : Move(), Serializable
+
+
+data class ItemOnParent internal constructor(
+        val itemOnParent: String,
 
         @JsonProperty("move")
         override val name: String

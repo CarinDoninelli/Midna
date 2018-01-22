@@ -1,13 +1,14 @@
 package com.carin.doninelli.midna.bot;
 
 import com.carin.doninelli.core.loader.ResourceLoader;
-import com.carin.doninelli.dex.factory.DexFactory;
+import com.carin.doninelli.dex.DexFactory;
 import com.carin.doninelli.midna.bot.commands.AvatarCommand;
 import com.carin.doninelli.midna.bot.commands.Command;
 import com.carin.doninelli.midna.bot.commands.DexCommand;
 import com.carin.doninelli.midna.bot.commands.HelpCommand;
 import com.carin.doninelli.midna.bot.commands.WolframCommand;
 import com.carin.doninelli.midna.bot.commands.registrator.CommandRegistrationHandler;
+import com.carin.doninelli.midna.bot.commands.services.ResponseService;
 import com.carin.doninelli.wolfram.factory.WolframFactory;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
@@ -33,7 +34,7 @@ public final class Midna {
         ResponseService responseService = new ResponseService(true);
 
         List<Command> commands = Arrays.asList(
-                new AvatarCommand(),
+                new AvatarCommand(responseService),
                 new DexCommand(dexFactory.createDex(), responseService),
                 new WolframCommand(wolframFactory.createWolframClient(wolframAppId), responseService)
         );

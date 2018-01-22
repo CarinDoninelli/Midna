@@ -1,4 +1,4 @@
-package com.carin.doninelli.midna.bot;
+package com.carin.doninelli.midna.bot.commands.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public final class ResponseService {
                 message.send();
             } catch (RateLimitException ex) {
                 if (retryOnFailure) {
-                    LOGGER.info("Rate Limit hit. Retrying failed request...");
+                    LOGGER.info("Rate Limit hit. Retrying request...");
                     throw ex;
                 } else {
                     LOGGER.error(ex.getLocalizedMessage(), ex);

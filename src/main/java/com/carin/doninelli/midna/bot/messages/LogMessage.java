@@ -8,7 +8,9 @@ public enum LogMessage {
 
     COMMAND_EXECUTED("{} command executed in {} ms"),
 
-    COMMAND_REGISTERED("{} command registered.");
+    COMMAND_REGISTERED("{} command registered."),
+
+    POKEMON_SPRITE("Pokemon with name '{}' and sprite '{}'.");
 
     private final String value;
 

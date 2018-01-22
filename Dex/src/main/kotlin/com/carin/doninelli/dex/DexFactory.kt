@@ -1,5 +1,6 @@
 package com.carin.doninelli.dex
 
+import com.carin.doninelli.dex.internal.DexImpl
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -12,5 +13,5 @@ class DexFactory {
         configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     }
 
-    fun createNewDex(): Dex = DexImpl(mapper)
+    fun createDex(): Dex = DexImpl(mapper)
 }

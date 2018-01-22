@@ -6,19 +6,23 @@ import java.net.URL
 import java.util.*
 
 class ResourceLoader {
-    fun getUrl(resourceName: String): URL {
-        val loader = javaClass.classLoader
-        return loader.getResource(resourceName) ?: throw MissingResourceException(resourceName)
-    }
+
+    private val loader = javaClass.classLoader
+
+    fun getUrl(resourceName: String): URL =
+            loader.getResource(resourceName) ?: throw MissingResourceException(resourceName)
 
     fun getProperty(resource: String, property: String): String {
         val properties = Properties()
-        getResourceAsStream(resource)?.use {
+        getResourceAsStreamOrNull(resource)?.use {
             properties.load(it)
         }
 
         return properties.getProperty(property) ?: throw MissingResourceException("$resource-$property")
     }
 
-    fun getResourceAsStream(resource: String): InputStream? = javaClass.classLoader.getResourceAsStream(resource)
+    fun getResourceAsStreamOrNull(resource: String): InputStream? = loader.getResourceAsStream(resource)
+
+    fun getResourceAsStream(resource: String): InputStream =
+            getResourceAsStreamOrNull(resource) ?: throw MissingResourceException(resource)
 }

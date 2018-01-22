@@ -1,6 +1,6 @@
 package com.carin.doninelli.midna.bot.commands;
 
-import com.carin.doninelli.midna.bot.ResponseService;
+import com.carin.doninelli.midna.bot.commands.services.ResponseService;
 import com.carin.doninelli.midna.bot.embed.mappers.WolframPodsEmbedMapper;
 import com.carin.doninelli.wolfram.Wolfram;
 import com.carin.doninelli.wolfram.entities.WolframResult;
@@ -15,11 +15,10 @@ import sx.blah.discord.util.MessageBuilder;
 import java.util.Arrays;
 import java.util.List;
 
-public final class WolframCommand implements Command {
+public final class WolframCommand extends ReplyingCommand {
     private static final Logger LOG = LoggerFactory.getLogger(WolframCommand.class);
 
     private final Wolfram wolfram;
-    private final ResponseService responseService;
     private final WolframPodsEmbedMapper wolframPodsEmbedMapper;
 
     public WolframCommand(Wolfram wolfram) {
@@ -27,8 +26,8 @@ public final class WolframCommand implements Command {
     }
 
     public WolframCommand(Wolfram wolfram, ResponseService responseService) {
+        super(responseService);
         this.wolfram = wolfram;
-        this.responseService = responseService;
         this.wolframPodsEmbedMapper = new WolframPodsEmbedMapper();
     }
 
@@ -54,11 +53,10 @@ public final class WolframCommand implements Command {
     }
 
     @Override
-    public void execute(IMessage message, @Nullable String commandContent) {
+    MessageBuilder buildResponse(IMessage message, @Nullable String commandContent) {
+        MessageBuilder response = new MessageBuilder(message.getClient())
+                .withChannel(message.getChannel());
         try {
-            MessageBuilder response = new MessageBuilder(message.getClient())
-                    .withChannel(message.getChannel());
-
             if (commandContent == null) {
                 response.withContent("`Please provide a query.`");
             } else {
@@ -74,10 +72,10 @@ public final class WolframCommand implements Command {
                     response.withContent("`" + failedResult.getMessage() + "`");
                 }
             }
-
-            responseService.bufferResponseRequest(response);
         } catch (WolframException ex) {
             LOG.error(ex.getLocalizedMessage(), ex);
         }
+
+        return response;
     }
 }

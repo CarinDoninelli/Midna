@@ -1,6 +1,6 @@
 package com.carin.doninelli.midna.bot.commands;
 
-import com.carin.doninelli.midna.bot.ResponseService;
+import com.carin.doninelli.midna.bot.commands.services.ResponseService;
 import org.jetbrains.annotations.Nullable;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IMessage;
@@ -12,12 +12,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public final class AvatarCommand implements Command {
-
-    private final ResponseService responseService;
+public final class AvatarCommand extends ReplyingCommand {
 
     public AvatarCommand() {
-        responseService = new ResponseService(true);
+        this(new ResponseService(true));
+    }
+
+    public AvatarCommand(ResponseService responseService) {
+        super(responseService);
     }
 
     @Override
@@ -41,7 +43,7 @@ public final class AvatarCommand implements Command {
     }
 
     @Override
-    public void execute(IMessage message, @Nullable String commandContent) {
+    MessageBuilder buildResponse(IMessage message, @Nullable String commandContent) {
         Optional<IUser> user = message.getMentions().stream()
                 .findFirst();
 
@@ -59,6 +61,6 @@ public final class AvatarCommand implements Command {
             response.withContent("`User not found`");
         }
 
-        responseService.bufferResponseRequest(response);
+        return response;
     }
 }

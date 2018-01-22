@@ -1,5 +1,6 @@
-package com.carin.doninelli.dex.deserializers
+package com.carin.doninelli.dex.internal.deserializers
 
+import com.carin.doninelli.dex.entities.pokemon.ItemOnParent
 import com.carin.doninelli.dex.entities.pokemon.LvlUpMove
 import com.carin.doninelli.dex.entities.pokemon.Move
 import com.carin.doninelli.dex.entities.pokemon.ParentMove
@@ -25,8 +26,13 @@ internal class PokemonMoveDeserializer : JsonDeserializer<Move>() {
                     name = moveName
             )
 
-            else -> TmMove(
+            node.has("tm") -> TmMove(
                     tm = node["tm"].textValue(),
+                    name = moveName
+            )
+
+            else -> ItemOnParent(
+                    itemOnParent = node["item_on_parent"].textValue(),
                     name = moveName
             )
         }

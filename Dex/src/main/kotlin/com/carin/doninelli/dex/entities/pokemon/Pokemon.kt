@@ -1,10 +1,11 @@
 package com.carin.doninelli.dex.entities.pokemon
 
-import com.carin.doninelli.dex.deserializers.ColorDeserializer
-import com.carin.doninelli.dex.deserializers.PokemonMeasurementDeserializer
+import com.carin.doninelli.dex.entities.Generation
+import com.carin.doninelli.dex.entities.Names
+import com.carin.doninelli.dex.internal.deserializers.PokemonMeasurementDeserializer
+import com.carin.doninelli.dex.internal.deserializers.PokemonTypesDeserializer
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import java.awt.Color
 import java.io.Serializable
 
 data class Pokemon internal constructor(
@@ -13,11 +14,12 @@ data class Pokemon internal constructor(
 
         val nationalId: Int,
 
-        val types: List<String>,
+        @JsonDeserialize(using = PokemonTypesDeserializer::class)
+        val types: Types,
 
         val abilities: List<Ability>,
 
-        val genderRatios: GenderRatios,
+        val genderRatios: GenderRatios?,
 
         val catchRate: Int,
 
@@ -36,7 +38,6 @@ data class Pokemon internal constructor(
 
         val levelingRate: String,
 
-        @JsonDeserialize(using = ColorDeserializer::class)
         val color: Color,
 
         val baseFriendship: Int,
@@ -53,6 +54,15 @@ data class Pokemon internal constructor(
         @JsonProperty("evolution_from")
         val evolvesFrom: String?,
 
-        val evolutions: List<Map<String, Any>>
+        val evolutions: List<Map<String, Any>>,
 
-) : Serializable
+        val pokedexEntries: Map<Generation, PokedexEntry>
+
+) : Serializable {
+
+    val sprite: String get() {
+        val spriteName = names.english.toLowerCase()
+                .replace("\\.?\\s+".toRegex(), "_")
+        return "http://www.pkparaiso.com/imagenes/xy/sprites/animados/$spriteName.gif"
+    }
+}
