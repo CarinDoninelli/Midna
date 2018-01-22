@@ -1,3 +1,6 @@
 rootProject.name = 'MidnaBot'
 
 include 'Dex'
+include 'Wolfram'
+include 'Core'
+include 'JsonCore'

@@ -1,0 +1,3 @@
+dependencies {
+    compile files('lib/WolframAlpha-1.1.jar')
+}

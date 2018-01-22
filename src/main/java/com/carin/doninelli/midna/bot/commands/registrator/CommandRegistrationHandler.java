@@ -1,18 +1,15 @@
 package com.carin.doninelli.midna.bot.commands.registrator;
 
 import com.carin.doninelli.midna.bot.commands.Command;
+import com.carin.doninelli.midna.bot.messages.LogMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.api.events.IListener;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Collection;
 
 public final class CommandRegistrationHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(CommandRegistrationHandler.class);
 
     private final IDiscordClient discordClient;
 
@@ -24,5 +21,10 @@ public final class CommandRegistrationHandler {
         CommandReceivedListener listener = new CommandReceivedListener(command);
         discordClient.getDispatcher()
                 .registerListener(listener);
+        LOG.info(LogMessage.COMMAND_REGISTERED.getValue(), command.getName());
+    }
+
+    public void registerAll(Collection<Command> commands) {
+        commands.forEach(this::register);
     }
 }

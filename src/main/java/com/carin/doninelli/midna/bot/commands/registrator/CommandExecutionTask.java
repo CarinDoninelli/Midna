@@ -1,6 +1,7 @@
 package com.carin.doninelli.midna.bot.commands.registrator;
 
 import com.carin.doninelli.midna.bot.commands.Command;
+import com.carin.doninelli.midna.bot.messages.LogMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -20,12 +21,12 @@ final class CommandExecutionTask implements Runnable {
 
     @Override
     public void run() {
-        LOG.info("{} command called.", command.getName());
+        LOG.info(LogMessage.COMMAND_CALLED.getValue(), command.getName());
 
         long startTime = System.currentTimeMillis();
         command.execute(event.getMessage(), trimmedContent);
         long endTime = System.currentTimeMillis();
 
-        LOG.info("{} command executed in {} ms", command.getName(), endTime - startTime);
+        LOG.info(LogMessage.COMMAND_EXECUTED.getValue(), command.getName(), endTime - startTime);
     }
 }
