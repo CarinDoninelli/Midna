@@ -8,3 +8,8 @@ interface Dex {
 
     fun searchAbility(name: String): Ability?
 }
+
+fun main(args: Array<String>) {
+    val dex = DexFactory().createDex()
+    println(dex.searchPokemon("charmeleon"))
+}
