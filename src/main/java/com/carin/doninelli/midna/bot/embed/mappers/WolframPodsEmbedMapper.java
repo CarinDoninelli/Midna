@@ -8,7 +8,7 @@ import sx.blah.discord.util.EmbedBuilder;
 import java.awt.Color;
 import java.util.List;
 
-public final class WolframPodsEmbedMapper implements EmbedMapper<List<Pod>> {
+final class WolframPodsEmbedMapper implements EmbedMapper<List<Pod>> {
     @Override
     public EmbedObject map(List<Pod> object) {
         EmbedBuilder embed = new EmbedBuilder()
@@ -22,7 +22,6 @@ public final class WolframPodsEmbedMapper implements EmbedMapper<List<Pod>> {
                 podContent.append(subPodContent);
             }
 
-            System.out.println(pod);
             embed.appendField(pod.getTitle(), podContent.toString(), false);
         }
 

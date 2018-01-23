@@ -1,6 +1,5 @@
 package com.carin.doninelli.midna.bot;
 
-import com.carin.doninelli.core.loader.ResourceLoader;
 import com.carin.doninelli.dex.DexFactory;
 import com.carin.doninelli.midna.bot.commands.AvatarCommand;
 import com.carin.doninelli.midna.bot.commands.Command;
@@ -9,6 +8,8 @@ import com.carin.doninelli.midna.bot.commands.HelpCommand;
 import com.carin.doninelli.midna.bot.commands.WolframCommand;
 import com.carin.doninelli.midna.bot.commands.registrator.CommandRegistrationHandler;
 import com.carin.doninelli.midna.bot.commands.services.ResponseService;
+import com.carin.doninelli.midna.bot.resource.PropertySource;
+import com.carin.doninelli.midna.bot.resource.ResourceService;
 import com.carin.doninelli.wolfram.factory.WolframFactory;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
@@ -17,13 +18,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class Midna {
-
-    private static final String CREDENTIALS_PROPERTIES = "credentials.properties";
-
     public static void main(String[] args) {
-        ResourceLoader loader = new ResourceLoader();
-        String token = loader.getProperty(CREDENTIALS_PROPERTIES, "token");
-        String wolframAppId = loader.getProperty(CREDENTIALS_PROPERTIES, "wolfram");
+        ResourceService resourceService = ResourceService.INSTANCE;
+        String token = resourceService.getProperty(PropertySource.CREDENTIALS, "token");
+        String wolframAppId = resourceService.getProperty(PropertySource.CREDENTIALS, "wolfram");
 
         IDiscordClient discordClient = new ClientBuilder().withToken(token).login();
         CommandRegistrationHandler commandRegistrationHandler = new CommandRegistrationHandler(discordClient);

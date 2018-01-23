@@ -11,8 +11,3 @@ interface Dex {
 
     fun searchMove(name: String): Move?
 }
-
-fun main(args: Array<String>) {
-    val dex = DexFactory().createDex()
-    println(dex.searchMove("thunderbolt"))
-}

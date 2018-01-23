@@ -1,10 +1,11 @@
 package com.carin.doninelli.midna.bot.commands;
 
 import com.carin.doninelli.midna.bot.commands.services.ResponseService;
-import com.carin.doninelli.midna.bot.embed.mappers.WolframPodsEmbedMapper;
+import com.carin.doninelli.midna.bot.embed.mappers.EmbedMapper;
+import com.carin.doninelli.midna.bot.embed.mappers.EmbedMapperFactory;
 import com.carin.doninelli.wolfram.Wolfram;
+import com.carin.doninelli.wolfram.entities.Pod;
 import com.carin.doninelli.wolfram.entities.WolframResult;
-import com.carin.doninelli.wolfram.exceptions.WolframException;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,6 @@ public final class WolframCommand extends ReplyingCommand {
     private static final Logger LOG = LoggerFactory.getLogger(WolframCommand.class);
 
     private final Wolfram wolfram;
-    private final WolframPodsEmbedMapper wolframPodsEmbedMapper;
 
     public WolframCommand(Wolfram wolfram) {
         this(wolfram, new ResponseService(true));
@@ -28,7 +28,6 @@ public final class WolframCommand extends ReplyingCommand {
     public WolframCommand(Wolfram wolfram, ResponseService responseService) {
         super(responseService);
         this.wolfram = wolfram;
-        this.wolframPodsEmbedMapper = new WolframPodsEmbedMapper();
     }
 
 
@@ -56,24 +55,24 @@ public final class WolframCommand extends ReplyingCommand {
     MessageBuilder buildResponse(IMessage message, @Nullable String commandContent) {
         MessageBuilder response = new MessageBuilder(message.getClient())
                 .withChannel(message.getChannel());
-        try {
-            if (commandContent == null) {
-                response.withContent("`Please provide a query.`");
-            } else {
-                WolframResult result = wolfram.evaluateQuery(commandContent);
-                LOG.info("Wolfram query '{}' with result: '{}'", commandContent, result);
 
-                if (result instanceof WolframResult.Success) {
-                    WolframResult.Success successResult = (WolframResult.Success) result;
-                    EmbedObject embed = wolframPodsEmbedMapper.map(successResult.getPods());
-                    response.withEmbed(embed);
-                } else {
-                    WolframResult.Failure failedResult = (WolframResult.Failure) result;
-                    response.withContent("`" + failedResult.getMessage() + "`");
-                }
+        if (commandContent == null) {
+            response.withContent("`Please provide a query.`");
+        } else {
+            WolframResult result = wolfram.evaluateQuery(commandContent);
+            LOG.info("Wolfram query '{}' with result: '{}'", commandContent, result);
+
+            if (result instanceof WolframResult.Success) {
+                WolframResult.Success successResult = (WolframResult.Success) result;
+                EmbedMapperFactory embedMapperFactory = new EmbedMapperFactory();
+                EmbedMapper<List<Pod>> wolframPodsEmbedMapper = embedMapperFactory.createWolframPodEmbedMapper();
+
+                EmbedObject embed = wolframPodsEmbedMapper.map(successResult.getPods());
+                response.withEmbed(embed);
+            } else {
+                WolframResult.Failure failedResult = (WolframResult.Failure) result;
+                response.withContent("`" + failedResult.getMessage() + "`");
             }
-        } catch (WolframException ex) {
-            LOG.error(ex.getLocalizedMessage(), ex);
         }
 
         return response;

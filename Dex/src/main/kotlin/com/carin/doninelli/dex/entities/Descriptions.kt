@@ -1,4 +1,4 @@
-package com.carin.doninelli.dex.entities.ability
+package com.carin.doninelli.dex.entities
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.io.Serializable

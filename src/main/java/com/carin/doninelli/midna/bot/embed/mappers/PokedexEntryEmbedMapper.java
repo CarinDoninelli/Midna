@@ -10,11 +10,8 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.stream.Collectors;
 
-public final class PokedexEntryEmbedMapper implements EmbedMapper<Pokemon> {
+final class PokedexEntryEmbedMapper implements EmbedMapper<Pokemon> {
     private static final Logger LOG = LoggerFactory.getLogger(PokedexEntryEmbedMapper.class);
-
-    private static final String AUTHOR_NAME = "Dex";
-    private static final String AUTHOR_ICON_URL = "https://vignette.wikia.nocookie.net/clubpenguin/images/4/4c/Pokeball.png/revision/latest?cb=20130901024704";
 
     @Override
     public EmbedObject map(@NotNull Pokemon pokemon) {
@@ -32,8 +29,6 @@ public final class PokedexEntryEmbedMapper implements EmbedMapper<Pokemon> {
 
         return new EmbedBuilder()
                 .withTitle(pokemon.getNames().getEnglish() + " #" + pokemon.getNationalId())
-                .withAuthorName(AUTHOR_NAME)
-                .withAuthorIcon(AUTHOR_ICON_URL)
                 .withThumbnail(pokemon.getSprite())
                 .withColor(pokemon.getColor().getAwt())
                 .appendField("Types", typesField, true)

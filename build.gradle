@@ -52,5 +52,4 @@ dependencies {
     compile "com.github.austinv11:Discord4J:2.9.3"
     compile project(":Dex")
     compile project(":Wolfram")
-    compile project(':Core')
 }
