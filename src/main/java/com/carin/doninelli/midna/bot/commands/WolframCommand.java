@@ -20,6 +20,7 @@ public final class WolframCommand extends ReplyingCommand {
     private static final Logger LOG = LoggerFactory.getLogger(WolframCommand.class);
 
     private final Wolfram wolfram;
+    private final EmbedMapperFactory embedMapperFactory;
 
     public WolframCommand(Wolfram wolfram) {
         this(wolfram, new ResponseService(true));
@@ -28,6 +29,7 @@ public final class WolframCommand extends ReplyingCommand {
     public WolframCommand(Wolfram wolfram, ResponseService responseService) {
         super(responseService);
         this.wolfram = wolfram;
+        this.embedMapperFactory = new EmbedMapperFactory();
     }
 
 
@@ -64,7 +66,6 @@ public final class WolframCommand extends ReplyingCommand {
 
             if (result instanceof WolframResult.Success) {
                 WolframResult.Success successResult = (WolframResult.Success) result;
-                EmbedMapperFactory embedMapperFactory = new EmbedMapperFactory();
                 EmbedMapper<List<Pod>> wolframPodsEmbedMapper = embedMapperFactory.createWolframPodEmbedMapper();
 
                 EmbedObject embed = wolframPodsEmbedMapper.map(successResult.getPods());
