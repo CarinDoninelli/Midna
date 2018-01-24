@@ -15,7 +15,7 @@ final class PokedexEntryEmbedMapper implements EmbedMapper<Pokemon> {
 
     @Override
     public EmbedObject map(@NotNull Pokemon pokemon) {
-        String typesField = pokemon.getTypes().getFirst();
+        String typesField = pokemon.getTypes().getFirst().name();
         if (pokemon.getTypes().getSecond() != null) {
             typesField += "\n";
             typesField += pokemon.getTypes().getSecond();

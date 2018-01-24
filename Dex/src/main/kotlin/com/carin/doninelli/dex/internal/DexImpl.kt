@@ -4,6 +4,8 @@ import com.carin.doninelli.dex.Dex
 import com.carin.doninelli.dex.entities.ability.Ability
 import com.carin.doninelli.dex.entities.move.Move
 import com.carin.doninelli.dex.entities.pokemon.Pokemon
+import com.carin.doninelli.dex.entities.type.Type
+import com.carin.doninelli.dex.entities.type.TypeInfo
 import com.carin.doninelli.dex.internal.messages.LogMessage
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -14,6 +16,7 @@ private const val POKEDEX_PATH = "pokedex"
 private const val POKEMON_PATH = "$POKEDEX_PATH/pokemon"
 private const val ABILITY_PATH = "$POKEDEX_PATH/ability"
 private const val MOVE_PATH = "$POKEDEX_PATH/move"
+private const val TYPE_PATH = "$POKEDEX_PATH/type"
 
 internal class DexImpl(private val mapper: ObjectMapper) : Dex {
     private val log = LoggerFactory.getLogger(DexImpl::class.java)
@@ -51,5 +54,13 @@ internal class DexImpl(private val mapper: ObjectMapper) : Dex {
         val moveJsonPath = "$MOVE_PATH/$sanitizedName.json"
 
         return loader.getResourceAsStream(moveJsonPath)?.use(mapper::readValue)
+    }
+
+    override fun searchTypeInfo(type: Type): TypeInfo {
+        log.debug(LogMessage.TYPE_INFO_LOOKUP_CALLED.value, type)
+
+        val typeJson = "$TYPE_PATH/${type.name.toLowerCase()}.json"
+
+        return loader.getResourceAsStream(typeJson).use(mapper::readValue)
     }
 }

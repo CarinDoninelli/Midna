@@ -4,6 +4,8 @@ import com.carin.doninelli.dex.Dex;
 import com.carin.doninelli.dex.entities.ability.Ability;
 import com.carin.doninelli.dex.entities.move.Move;
 import com.carin.doninelli.dex.entities.pokemon.Pokemon;
+import com.carin.doninelli.dex.entities.type.Type;
+import com.carin.doninelli.dex.entities.type.TypeInfo;
 import com.carin.doninelli.midna.bot.commands.services.ResponseService;
 import com.carin.doninelli.midna.bot.embed.mappers.EmbedMapper;
 import com.carin.doninelli.midna.bot.embed.mappers.EmbedMapperFactory;
@@ -15,12 +17,19 @@ import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.MessageBuilder;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public final class DexCommand extends ReplyingCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(DexCommand.class);
+
+    private static final String POKEMON_SUB_COMMAND = "pokemon";
+    private static final String ABILITY_SUB_COMMAND = "ability";
+    private static final String MOVE_SUB_COMMAND = "move";
+    private static final String TYPE_SUB_COMMAND = "type";
 
     private final Dex dex;
     private final EmbedMapperFactory embedMapperFactory;
@@ -82,17 +91,40 @@ public final class DexCommand extends ReplyingCommand {
     @Nullable
     private BiConsumer<MessageBuilder, String> getSubCommandAction(String subCommand) {
         BiConsumer<MessageBuilder, String> action;
-        if (subCommand.equalsIgnoreCase("pokemon")) {
+        if (subCommand.equalsIgnoreCase(POKEMON_SUB_COMMAND)) {
             action = this::searchPokemon;
-        } else if (subCommand.equalsIgnoreCase("ability")) {
+        } else if (subCommand.equalsIgnoreCase(ABILITY_SUB_COMMAND)) {
             action = this::searchAbility;
-        } else if (subCommand.equalsIgnoreCase("move")) {
+        } else if (subCommand.equalsIgnoreCase(MOVE_SUB_COMMAND)) {
             action = this::searchMove;
+        } else if (subCommand.equalsIgnoreCase(TYPE_SUB_COMMAND)) {
+            action = this::searchType;
         } else {
             action = null;
         }
 
         return action;
+    }
+
+    private void searchType(MessageBuilder response, String subCommandContent) {
+        if (subCommandContent == null || subCommandContent.isEmpty()) {
+            response.withContent("`Please specify a type.`");
+        } else {
+            Optional<Type> type = Arrays.stream(Type.values())
+                    .filter(it -> it.name().equalsIgnoreCase(subCommandContent))
+                    .findFirst();
+
+            if (type.isPresent()) {
+                TypeInfo typeInfo = dex.searchTypeInfo(type.get());
+                LOGGER.info(LogMessage.TYPE_INFO_FOUND.getValue(), type, typeInfo);
+                EmbedMapper<TypeInfo> typeInfoEmbedMapper = embedMapperFactory.createMapper(typeInfo.getClass());
+
+                EmbedObject embed = typeInfoEmbedMapper.map(typeInfo);
+                response.withEmbed(embed);
+            } else {
+                response.withContent("`Type not found.`");
+            }
+        }
     }
 
     private void searchMove(MessageBuilder response, String subCommandContent) {
@@ -104,7 +136,7 @@ public final class DexCommand extends ReplyingCommand {
                 response.withContent("`Move not found.`");
             } else {
                 LOGGER.info(LogMessage.MOVE_WITH_QUERY_FOUND.getValue(), subCommandContent, move);
-                EmbedMapper<Move> moveEmbedMapper = embedMapperFactory.createMoveEmbedMapper();
+                EmbedMapper<Move> moveEmbedMapper = embedMapperFactory.createMapper(move.getClass());
 
                 EmbedObject embed = moveEmbedMapper.map(move);
                 response.withEmbed(embed);
@@ -121,7 +153,7 @@ public final class DexCommand extends ReplyingCommand {
                 response.withContent("`Ability not found.`");
             } else {
                 LOGGER.info(LogMessage.ABILITY_WITH_QUERY_FOUND.getValue(), subCommandContent);
-                EmbedMapper<Ability> abilityEmbedMapper = embedMapperFactory.createAbilityEmbedMapper();
+                EmbedMapper<Ability> abilityEmbedMapper = embedMapperFactory.createMapper(ability.getClass());
 
                 EmbedObject embedObject = abilityEmbedMapper.map(ability);
                 response.withEmbed(embedObject);
@@ -138,7 +170,7 @@ public final class DexCommand extends ReplyingCommand {
                 response.withContent("`Pokemon not found`");
             } else {
                 LOGGER.info(LogMessage.POKEMON_WITH_QUERY_FOUND.getValue(), subCommandContent, pokemon);
-                EmbedMapper<Pokemon> pokedexEntryEmbedMapper = embedMapperFactory.createPokemonEmbedMapper();
+                EmbedMapper<Pokemon> pokedexEntryEmbedMapper = embedMapperFactory.createMapper(pokemon.getClass());
 
                 EmbedObject embed = pokedexEntryEmbedMapper.map(pokemon);
                 response.withEmbed(embed);

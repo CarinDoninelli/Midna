@@ -3,6 +3,8 @@ package com.carin.doninelli.midna.bot.commands;
 import com.carin.doninelli.midna.bot.commands.services.ResponseService;
 import com.carin.doninelli.midna.bot.embed.mappers.EmbedMapper;
 import com.carin.doninelli.midna.bot.embed.mappers.EmbedMapperFactory;
+import com.carin.doninelli.midna.bot.messages.LogMessage;
+import com.carin.doninelli.midna.bot.reflect.TypeToken;
 import com.carin.doninelli.wolfram.Wolfram;
 import com.carin.doninelli.wolfram.entities.Pod;
 import com.carin.doninelli.wolfram.entities.WolframResult;
@@ -13,6 +15,7 @@ import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.MessageBuilder;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,11 +65,12 @@ public final class WolframCommand extends ReplyingCommand {
             response.withContent("`Please provide a query.`");
         } else {
             WolframResult result = wolfram.evaluateQuery(commandContent);
-            LOG.info("Wolfram query '{}' with result: '{}'", commandContent, result);
+            LOG.info(LogMessage.WOLFRAM_QUERY_RESULT.getValue(), commandContent, result);
 
             if (result instanceof WolframResult.Success) {
                 WolframResult.Success successResult = (WolframResult.Success) result;
-                EmbedMapper<List<Pod>> wolframPodsEmbedMapper = embedMapperFactory.createWolframPodEmbedMapper();
+                Type podListType = new TypeToken<List<Pod>>(){}.getType();
+                EmbedMapper<List<Pod>> wolframPodsEmbedMapper = embedMapperFactory.createMapper(podListType);
 
                 EmbedObject embed = wolframPodsEmbedMapper.map(successResult.getPods());
                 response.withEmbed(embed);

@@ -16,7 +16,15 @@ public enum LogMessage {
 
     ABILITY_WITH_QUERY_FOUND("Ability with query '{}' found. {}"),
 
-    MOVE_WITH_QUERY_FOUND("Move with query '{}' found. {}");
+    MOVE_WITH_QUERY_FOUND("Move with query '{}' found. {}"),
+
+    TYPE_INFO_FOUND("Type '{}' info found. {}"),
+
+    PROPERTIES_LOADED("Properties file {} loaded."),
+
+    THUMBNAIL_FOR_TYPE_FOUND("Thumbnail for type '{}' found: {}"),
+
+    WOLFRAM_QUERY_RESULT("Wolfram query '{}' with result: '{}'");
 
     private final String value;
 

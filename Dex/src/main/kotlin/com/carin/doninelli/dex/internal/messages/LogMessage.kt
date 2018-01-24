@@ -11,5 +11,7 @@ internal enum class LogMessage(val value: String) {
 
     MOVE_SEARCH_CALLED("Move search called with name '{}'"),
 
-    MOVE_NAME_SANITIZED("Move name sanitized to '{}'")
+    MOVE_NAME_SANITIZED("Move name sanitized to '{}'"),
+
+    TYPE_INFO_LOOKUP_CALLED("Type {} info lookup called.")
 }
