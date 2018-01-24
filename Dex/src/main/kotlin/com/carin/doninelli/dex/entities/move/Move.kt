@@ -22,11 +22,11 @@ data class Move internal constructor(
 
         val accuracy: Int,
 
-        val category: Category,
+        val category: MoveCategory,
 
         val priority: Int,
 
-        val target: Target,
+        val target: MoveTarget,
 
         val critical: Int,
 

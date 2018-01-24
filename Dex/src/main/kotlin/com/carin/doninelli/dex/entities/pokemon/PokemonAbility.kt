@@ -3,7 +3,7 @@ package com.carin.doninelli.dex.entities.pokemon
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.io.Serializable
 
-data class Ability internal constructor(
+data class PokemonAbility internal constructor(
 
         val name: String,
 

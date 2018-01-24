@@ -15,11 +15,11 @@ data class Pokemon internal constructor(
         val nationalId: Int,
 
         @JsonDeserialize(using = PokemonTypesDeserializer::class)
-        val types: Types,
+        val types: PokemonTypes,
 
-        val abilities: List<Ability>,
+        val abilities: List<PokemonAbility>,
 
-        val genderRatios: GenderRatios?,
+        val genderRatios: PokemonGenderRatios?,
 
         val catchRate: Int,
 
@@ -27,36 +27,36 @@ data class Pokemon internal constructor(
 
         @JsonProperty("height_eu")
         @JsonDeserialize(using = PokemonMeasurementDeserializer::class)
-        val height: Measurement,
+        val height: PokemonMeasurement,
 
         @JsonProperty("weight_eu")
         @JsonDeserialize(using = PokemonMeasurementDeserializer::class)
-        val weight: Measurement,
+        val weight: PokemonMeasurement,
 
         @JsonProperty("base_exp_yield")
         val baseExperienceYield: Int,
 
         val levelingRate: String,
 
-        val color: Color,
+        val color: PokemonColor,
 
         val baseFriendship: Int,
 
-        val evYield: Stats,
+        val evYield: PokemonStats,
 
-        val baseStats: Stats,
+        val baseStats: PokemonStats,
 
         @JsonProperty("learnset")
-        val learnSet: List<Move>,
+        val learnSet: List<PokemonMove>,
 
-        val categories: Categories,
+        val categories: PokemonCategories,
 
         @JsonProperty("evolution_from")
         val evolvesFrom: String?,
 
         val evolutions: List<Map<String, Any>>,
 
-        val pokedexEntries: Map<Generation, PokedexEntry>
+        val pokedexEntries: Map<Generation, PokemonPokedexEntry>
 
 ) : Serializable {
 

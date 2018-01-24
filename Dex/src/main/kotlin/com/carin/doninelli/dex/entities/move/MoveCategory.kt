@@ -2,7 +2,7 @@ package com.carin.doninelli.dex.entities.move
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-enum class Category {
+enum class MoveCategory {
 
     @JsonProperty("physical")
     Physical,

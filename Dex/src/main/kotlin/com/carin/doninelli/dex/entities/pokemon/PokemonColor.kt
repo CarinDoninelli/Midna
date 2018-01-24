@@ -2,7 +2,7 @@ package com.carin.doninelli.dex.entities.pokemon
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-enum class Color(val r: Int, val g: Int, val b: Int) {
+enum class PokemonColor(val r: Int, val g: Int, val b: Int) {
     Pink(255, 192, 203),
 
     Green(0, 255, 0),

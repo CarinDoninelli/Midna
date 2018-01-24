@@ -2,7 +2,7 @@ package com.carin.doninelli.dex.entities.move
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-enum class Target {
+enum class MoveTarget {
 
     @JsonProperty("target")
     Target,

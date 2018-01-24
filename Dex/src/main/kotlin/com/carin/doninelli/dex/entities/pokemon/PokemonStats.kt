@@ -2,7 +2,7 @@ package com.carin.doninelli.dex.entities.pokemon
 
 import java.io.Serializable
 
-data class Stats internal constructor(
+data class PokemonStats internal constructor(
         val hp: Int,
         val atk: Int,
         val def: Int,

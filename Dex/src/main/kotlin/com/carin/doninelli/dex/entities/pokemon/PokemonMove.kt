@@ -6,38 +6,38 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.io.Serializable
 
 @JsonDeserialize(using = PokemonMoveDeserializer::class)
-sealed class Move : Serializable {
+sealed class PokemonMove : Serializable {
     abstract val name: String
 }
 
 
-data class LvlUpMove internal constructor(
+data class LvlUpPokemonMove internal constructor(
         val level: Int,
 
         @JsonProperty("move")
         override val name: String
-) : Move(), Serializable
+) : PokemonMove(), Serializable
 
 
-data class TmMove internal constructor(
+data class TmPokemonMove internal constructor(
         val tm: String,
 
         @JsonProperty("move")
         override val name: String
-) : Move(), Serializable
+) : PokemonMove(), Serializable
 
 
-data class ParentMove internal constructor(
+data class ParentPokemonMove internal constructor(
         val parent: String,
 
         @JsonProperty("move")
         override val name: String
-) : Move(), Serializable
+) : PokemonMove(), Serializable
 
 
-data class ItemOnParent internal constructor(
+data class ItemOnParentPokemonMove internal constructor(
         val itemOnParent: String,
 
         @JsonProperty("move")
         override val name: String
-) : Move(), Serializable
+) : PokemonMove(), Serializable
